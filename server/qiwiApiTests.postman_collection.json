@@ -1,0 +1,53 @@
+{
+  "info": {
+    "_postman_id": "4fb5d9ee-8ea4-4484-8704-04cc1041b12d",
+    "name": "qiwiApiTests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "409075c5-2fb6-4fad-948d-408e09ed25aa",
+            "exec": [
+              "pm.test(\"Status test\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"Phone number test\", () => {\r",
+              "    var data = pm.response.json();\r",
+              "    pm.expect(data.authInfo.personId).to.eql(79373931917)\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://edge.qiwi.com/person-profile/v1/profile/current",
+          "protocol": "https",
+          "host": ["edge", "qiwi", "com"],
+          "path": ["person-profile", "v1", "profile", "current"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
