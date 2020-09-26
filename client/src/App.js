@@ -5,7 +5,7 @@ import CustomContent from "./Content";
 
 const App = () => {
   return (
-    <Layout className="layout">
+    <Layout>
       <CustomHeader />
       <CustomContent />
     </Layout>

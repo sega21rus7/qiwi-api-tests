@@ -13,8 +13,8 @@ const CustomContent = () => {
       <Row>
         <Col span={12}>
           <TokenForm setReport={setReport} />
-          <ReportTable report={report} />
         </Col>
+        <ReportTable report={report} />
       </Row>
     </Content>
   );
