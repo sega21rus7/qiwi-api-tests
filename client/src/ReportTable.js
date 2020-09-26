@@ -53,7 +53,7 @@ const ReportTable = (props) => {
         <div>
           {tests.map((test, index) => {
             return (
-              <div>
+              <div key={index}>
                 <Popover
                   placement="right"
                   content={
