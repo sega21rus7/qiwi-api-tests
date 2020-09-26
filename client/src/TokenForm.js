@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 
 const styles = {
   form: {
@@ -8,31 +8,29 @@ const styles = {
   },
 };
 
-const TokenForm = () => {
+const TokenForm = (props) => {
   const onFinish = async (values) => {
     try {
-      console.log("Success:", values);
-      // /person-profile/v1/profile/current
       const body = {
-        token: values.token 
+        token: values.token,
       };
       const response = await fetch("/api", {
-        method: 'POST',
+        method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
       const data = await response.json();
-      console.log(data);
+      props.setReport(data);
     } catch (err) {
       console.log(err);
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    message.error("Поле токен обязательно для заполнения!");
   };
 
   return (
