@@ -1,53 +1,574 @@
 {
-  "info": {
-    "_postman_id": "4fb5d9ee-8ea4-4484-8704-04cc1041b12d",
-    "name": "qiwiApiTests",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Profile",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "id": "409075c5-2fb6-4fad-948d-408e09ed25aa",
-            "exec": [
-              "pm.test(\"Status test\", () => {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Phone number test\", () => {\r",
-              "    var data = pm.response.json();\r",
-              "    pm.expect(data.authInfo.personId).to.eql(79373931917)\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          },
-          {
-            "key": "Accept",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "https://edge.qiwi.com/person-profile/v1/profile/current",
-          "protocol": "https",
-          "host": ["edge", "qiwi", "com"],
-          "path": ["person-profile", "v1", "profile", "current"]
-        }
-      },
-      "response": []
-    }
-  ],
-  "protocolProfileBehavior": {}
+	"info": {
+		"_postman_id": "4fb5d9ee-8ea4-4484-8704-04cc1041b12d",
+		"name": "qiwiApiTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Профиль пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "409075c5-2fb6-4fad-948d-408e09ed25aa",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Номер телефона\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.authInfo.personId).to.eql(79373931917);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/person-profile/v1/profile/current",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"person-profile",
+						"v1",
+						"profile",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Баланс",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "63d14da9-12fd-45a9-a2d4-f4c27b47d675",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Количество счетов\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.accounts.length).to.eql(2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Баланс рублевого счета\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    const acc = data.accounts.find(x => x.alias == \"qw_wallet_rub\");\r",
+							"    pm.expect(acc.balance.amount).to.eql(10.03);\r",
+							"    pm.expect(acc.balance.currency).to.eql(643);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Баланс долларового счета\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    const acc = data.accounts.find(x => x.alias == \"qw_wallet_usd\");\r",
+							"    pm.expect(acc.balance.amount).to.eql(0);\r",
+							"    pm.expect(acc.balance.currency).to.eql(840);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/funding-sources/v2/persons/79373931917/accounts",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"funding-sources",
+						"v2",
+						"persons",
+						"79373931917",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Перевод(получатель не верифицирован)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fe66ee76-1aa7-43a8-8e16-463aa98fda42",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Статус кошелька получателя не позволяет совершить платеж\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.code).to.eql('QWPRC-167');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "55dcfab8-abfe-44bf-bec0-16bcfed9557d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"1\",\r\n    \"sum\": {\r\n        \"amount\":1,\r\n        \"currency\":\"643\"\r\n    },\r\n    \"paymentMethod\": {\r\n        \"type\":\"Account\",\r\n        \"accountId\":\"643\"\r\n    },\r\n    \"comment\":\"test\",\r\n    \"fields\": {\r\n\t    \"account\":\"+79278400633\"\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "https://edge.qiwi.com/sinap/api/v2/terms/99/payments",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"sinap",
+						"api",
+						"v2",
+						"terms",
+						"99",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Перевод(не хватает средств)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38946c59-5b54-499d-8834-675983b9972d",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Платеж невозможен. Не хватает средств\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.code).to.eql('QWPRC-319');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccc25e2f-b3bb-4a0c-a049-5c460e2816ff",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"{{$guid}}\",\r\n    \"sum\": {\r\n        \"amount\":100,\r\n        \"currency\":\"643\"\r\n    },\r\n    \"paymentMethod\": {\r\n        \"type\":\"Account\",\r\n        \"accountId\":\"643\"\r\n    },\r\n    \"comment\":\"test\",\r\n    \"fields\": {\r\n\t    \"account\":\"+79373931917\"\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "https://edge.qiwi.com/sinap/api/v2/terms/99/payments",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"sinap",
+						"api",
+						"v2",
+						"terms",
+						"99",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Лимит оборота в месяц",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "351bee45-030c-4f2b-9f7c-7e3eab4d9722",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Лимит оборота в месяц в рублях\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    const limits = data.limits.RU[0];\r",
+							"    pm.expect(limits.currency).to.eql('RUB');\r",
+							"    pm.expect(limits.max).to.eql(200000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/qw-limits/v1/persons/79373931917/actual-limits?types=TURNOVER",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"qw-limits",
+						"v1",
+						"persons",
+						"79373931917",
+						"actual-limits"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "TURNOVER"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Максимальный допустимый остаток на счёте",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c765af8-a8eb-48ee-930e-70dfca35905c",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Максимальный допустимый остаток на счёте в рублях\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    const limits = data.limits.RU[0];\r",
+							"    pm.expect(limits.currency).to.eql('RUB');\r",
+							"    pm.expect(limits.max).to.eql(60000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/qw-limits/v1/persons/79373931917/actual-limits?types=REFILL",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"qw-limits",
+						"v1",
+						"persons",
+						"79373931917",
+						"actual-limits"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "REFILL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Лимит переводов на другие кошельки в месяц",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "60cef986-286f-464e-8964-6954cf32fb1b",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Лимит переводов на другие кошельки в месяц в рублях\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.limits.RU.length).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/qw-limits/v1/persons/79373931917/actual-limits?types=PAYMENTS_P2P",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"qw-limits",
+						"v1",
+						"persons",
+						"79373931917",
+						"actual-limits"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "PAYMENTS_P2P"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Лимит переводов на банковские счета и карты, кошельки других систем",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "86751a37-b57e-4f21-9ec6-003c7808a097",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Лимит переводов на банковские счета и карты, кошельки других систем в месяц в рублях\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    pm.expect(data.limits.RU.length).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/qw-limits/v1/persons/79373931917/actual-limits?types=PAYMENTS_PROVIDER_PAYOUT",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"qw-limits",
+						"v1",
+						"persons",
+						"79373931917",
+						"actual-limits"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "PAYMENTS_PROVIDER_PAYOUT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Лимит снятия наличных в месяц",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "712d7ad0-a8fc-4069-8729-12634460ab84",
+						"exec": [
+							"pm.test(\"Статус\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Лимит снятия наличных в месяц в рублях\", () => {\r",
+							"    const data = pm.response.json();\r",
+							"    const limits = data.limits.RU[0];\r",
+							"    pm.expect(limits.currency).to.eql('RUB');\r",
+							"    pm.expect(limits.max).to.eql(40000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://edge.qiwi.com/qw-limits/v1/persons/79373931917/actual-limits?types=WITHDRAW_CASH",
+					"protocol": "https",
+					"host": [
+						"edge",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"qw-limits",
+						"v1",
+						"persons",
+						"79373931917",
+						"actual-limits"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "WITHDRAW_CASH"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
 }

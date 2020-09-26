@@ -6,16 +6,23 @@ const router = Router();
 
 router.post("/api", async (request, response) => {
   const token = request.body.token;
+  const newmanRunFilePath = path.resolve(process.cwd(), "./newmanRun");
+  const newmanReportFilePath = path.resolve(
+    process.cwd(),
+    "./newmanReports.json"
+  );
 
   try {
-    require(path.resolve(process.cwd(), "./newmanRun"))(token);
-    let report = JSON.parse(
-      fs.readFileSync(
-        path.resolve(process.cwd(), "./newmanReports.json"),
-        "utf8"
-      )
-    );
+    await new Promise((resolve, reject) => {
+      try {
+        require(newmanRunFilePath)(token);
+        if (fs.existsSync(newmanReportFilePath)) resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
 
+    let report = JSON.parse(fs.readFileSync(newmanReportFilePath, "utf8"));
     console.log(report);
     response.status(200).json(report);
   } catch (err) {
