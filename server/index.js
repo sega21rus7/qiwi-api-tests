@@ -5,7 +5,6 @@ const routes = require("./routes"); // наши роутеры, адреса п�
 const app = express(); // создаем приложение
 const port = 8000;
 
-// определяем различные middleware чтобы express корректно работал
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -14,7 +13,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(routes);
 
-// поднимаем сервер с портом 8000
 app.listen(port, (err) => {
   if (err) {
     return console.log("Ошибка при запуске сервера", err);
