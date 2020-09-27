@@ -13,6 +13,7 @@ const TokenForm = (props) => {
   // метод, который вызовется при успешной отправке формы
   const onFinish = async (values) => {
     try {
+      props.setReport(null); // присваиваем пустой объект чтобы не отображать неправильные данные
       const body = {
         // данные для отправки запроса
         token: values.token, // токен qiwi api
@@ -29,8 +30,14 @@ const TokenForm = (props) => {
       });
       // получаем ответ с сервера
       const data = await response.json();
-      // присваиваем отчету данные полученные с сервера
-      props.setReport(data);
+      console.log("data from server", data);
+      // если все тесты не прошли токен неверный
+      if (data.run.failures.length >= 20) {
+        message.error("Неверный токен"); // выводим сообщение об ошибке
+      } else {
+        // иначе присваиваем отчету данные полученные с сервера
+        props.setReport(data);
+      }
     } catch (err) {
       console.log(err); // если произошла ошибка, выведем ее в консоль
     }

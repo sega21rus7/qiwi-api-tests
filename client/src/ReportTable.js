@@ -6,7 +6,6 @@ const ReportTable = (props) => {
 
   if (props.report && props.report.run) {
     // если отчет есть
-    console.log(props.report.run.executions);
     // присваиваем список запущенных тестов нашей переменной data
     data = props.report.run.executions;
   }

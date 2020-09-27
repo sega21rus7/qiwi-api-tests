@@ -8,7 +8,7 @@ const { Content } = Layout;
 const CustomContent = () => {
   // report - отчет о тестах, пока равен пустому js объекту {}
   // setReport - функция, которая будет изменять отчет
-  const [report, setReport] = React.useState({});
+  const [report, setReport] = React.useState(null);
 
   return (
     <Content>
