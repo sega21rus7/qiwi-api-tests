@@ -1,6 +1,38 @@
-https://developer.qiwi.com/ru/qiwi-wallet-personal/#profile - QIWI API
+## QIWI API tests
 
-1. Сгенерировать токен qiwi по адресу https://qiwi.com/api
-2. Установить необходимые пакеты nodejs командой npm run init
-3. Запустить сервер командой npm run server
-4. Запустить клиент командой npm run client
+This is a simple user interface for testing some requests to qiwi api.
+
+# Technology stack
+
+Server
++ Express
++ Newman
+
+Client
+
++ React
++ Ant-design
+# Installation
+
+Install all requirements for server and client.
+```
+npm run init
+```
+
+# Run
+Run server.
+```
+npm run server
+```
+Run client.
+```
+npm run client
+```
+
+# Using
+
+Generate token on link https://qiwi.com/api and input it in the form.
+
+![First screenshot](screenshots/1.png)
+![Second screenshot](screenshots/2.png)
+![Third screenshot](screenshots/3.png)
